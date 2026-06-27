@@ -49,7 +49,7 @@ export default function ScoreHistory() {
             .finally(() => setLoading(false));
     };
 
-    useEffect(() => { fetchScores(); }, []); // eslint-disable-line react-hooks/exhaustive-deps;
+    useEffect(() => { fetchScores(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // ── Sorting ───────────────────────────────────────────────────────────────
     const sorted = [...scores].sort((a, b) => {
