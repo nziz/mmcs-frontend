@@ -21,6 +21,16 @@ export const login = (username, password) =>
 export const getProfile = () =>
     API.get('/auth/profile/');
 
+// Applicant Registration
+export const registerApplicant = (data) =>
+    API.post('/applicant/register/', data);
+
+export const verifyApplicant = (username, otp_code) =>
+    API.post('/applicant/verify/', { username, otp_code });
+
+export const resendOtp = (username) =>
+    API.post('/auth/resend-otp/', { username });
+
 // Scoring
 export const scoreIndividual = (formData) =>
     API.post('/score/individual/', formData);
@@ -55,14 +65,11 @@ export const getBatches = () =>
 export const getInstitutions = () =>
     API.get('/institutions/');
 
-export default API;
-// Applicant self registration
-export const registerApplicant = (data) =>
-    API.post('/auth/register/', data);
-
 // Applicant own data
 export const getMyScores = () =>
     API.get('/applicant/my-scores/');
 
 export const updateMyProfile = (data) =>
     API.patch('/applicant/my-profile/', data);
+
+export default API;

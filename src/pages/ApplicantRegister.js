@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const API = 'http://127.0.0.1:8000/api';
+import { registerApplicant, verifyApplicant, resendOtp, getInstitutions } from '../services/api';
 
 export default function ApplicantRegister({ onBackToLogin }) {
     const [step, setStep] = useState('register'); // 'register' or 'verify'
     const [institutions, setInstitutions] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [resendLoading, setResendLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [username, setUsername] = useState('');
@@ -29,7 +28,7 @@ export default function ApplicantRegister({ onBackToLogin }) {
 
     useEffect(() => {
         // Load institutions for dropdown
-        axios.get(`${API}/institutions/`)
+        getInstitutions()
             .then(res => setInstitutions(res.data))
             .catch(() => {});
     }, []);
@@ -56,15 +55,28 @@ export default function ApplicantRegister({ onBackToLogin }) {
             setError('National ID is required.');
             return;
         }
+        if (!form.email.trim()) {
+            setError('Email address is required.');
+            return;
+        }
+        if (!form.full_name.trim()) {
+            setError('Full name is required.');
+            return;
+        }
+        if (!form.phone_number.trim()) {
+            setError('Phone number is required.');
+            return;
+        }
 
         setLoading(true);
         try {
-            const res = await axios.post(`${API}/applicant/register/`, form);
+            const res = await registerApplicant(form);
             setUsername(form.username);
-            setSuccess(res.data.message);
+            setSuccess(res.data.message || 'Registration successful! Check your email for OTP.');
             setStep('verify');
+            setOtp('');
         } catch (err) {
-            setError(err.response?.data?.error || 'Registration failed.');
+            setError(err.response?.data?.error || err.response?.data?.message || 'Registration failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -75,17 +87,28 @@ export default function ApplicantRegister({ onBackToLogin }) {
         setError('');
         setLoading(true);
         try {
-            const res = await axios.post(`${API}/applicant/verify/`, {
-                username, otp_code: otp
-            });
+            const res = await verifyApplicant(username, otp);
             // Store token and redirect to applicant portal
             localStorage.setItem('access_token', res.data.access);
             localStorage.setItem('refresh_token', res.data.refresh);
             window.location.reload();
         } catch (err) {
-            setError(err.response?.data?.error || 'Verification failed.');
+            setError(err.response?.data?.error || err.response?.data?.message || 'Verification failed. Please check your OTP.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleResendOtp = async () => {
+        setResendLoading(true);
+        setError('');
+        try {
+            await resendOtp(username);
+            setSuccess('New OTP sent to your email!');
+        } catch (err) {
+            setError(err.response?.data?.error || err.response?.data?.message || 'Failed to resend OTP. Please try again.');
+        } finally {
+            setResendLoading(false);
         }
     };
 
@@ -111,7 +134,7 @@ export default function ApplicantRegister({ onBackToLogin }) {
                 </div>
 
                 {error && <div style={styles.error}>{error}</div>}
-                {success && step === 'verify' && (
+                {success && (
                     <div style={styles.successBox}>{success}</div>
                 )}
 
@@ -325,13 +348,10 @@ export default function ApplicantRegister({ onBackToLogin }) {
                             <p style={styles.loginLink}>
                                 Didn't receive code?{' '}
                                 <span
-                                    style={styles.link}
-                                    onClick={async () => {
-                                        await axios.post(`${API}/auth/resend-otp/`, { username });
-                                        setSuccess('New OTP sent to your email!');
-                                    }}
+                                    style={{ ...styles.link, opacity: resendLoading ? 0.5 : 1, pointerEvents: resendLoading ? 'none' : 'auto' }}
+                                    onClick={handleResendOtp}
                                 >
-                                    Resend OTP
+                                    {resendLoading ? 'Sending...' : 'Resend OTP'}
                                 </span>
                             </p>
                         </div>

@@ -58,15 +58,6 @@ export default function Login({ onLogin, onRegister }) {
                 <button style={styles.registerBtn} onClick={onRegister}>
                     Create Applicant Account
                 </button>
-                <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '14px', color: '#666' }}>
-    New applicant?{' '}
-    <span
-        style={{ color: '#1a237e', fontWeight: '700', cursor: 'pointer' }}
-        onClick={onRegister}
-    >
-        Create an account
-    </span>
-</p>
 
                 <p style={styles.note}>
                     Staff accounts are created by the administrator only.
