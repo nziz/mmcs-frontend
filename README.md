@@ -50,8 +50,8 @@ src/
 
 This frontend connects to a Django REST API:
 
-- **Backend Repo:** *(Add your backend GitHub link here)*
-- **API Base URL:** `http://127.0.0.1:8000` (local development)
+- **Backend Repo:"" https://github.com/nziz/mmcss-backend""
+- **API Base URL: `http://127.0.0.1:8000` (local development)
 
 Backend features:
 - Django REST Framework
