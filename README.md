@@ -1,70 +1,99 @@
-# Getting Started with Create React App
+ MMCSS — Mobile Money Credit Scoring System (Frontend)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based frontend for a fintech credit scoring platform built to improve financial inclusion in Rwanda. This application connects to a Django REST API backend to deliver individual scoring, batch processing, applicant portals, and admin dashboards for mobile money lenders.
 
-## Available Scripts
+Tech Stack
 
-In the project directory, you can run:
+- React — UI framework
+- React Router DOM— Client-side routing
+- Axios** — HTTP client with JWT refresh logic
+- Recharts — Data visualization (score trends, tier distribution)
+- Inline Styles — Component-level styling (no CSS-in-JS library)
+- jsPDF / html2canvas — PDF report generation
+- docx / file-saver — Word document export
 
-### `npm start`
+ Project Structure
+src/
+├── App.js              # Main router: Dashboard, Admin, Scoring, Portal, Auth
+├── api/
+│   ├── apiConfig.js    # Axios instance with JWT interceptors & refresh
+│   └── api.js          # API calls: auth, applicants, scoring, institutions
+├── pages/
+│   ├── Dashboard.js          # Admin overview with stats & charts
+│   ├── AdminPanel.js         # User & rule management
+│   ├── ScoreIndividual.js    # Single applicant scoring + PDF/Word export
+│   ├── ScoreBatch.js         # Bulk scoring from CSV/upload
+│   ├── ScoreHistory.js       # Historical score records with detail view
+│   ├── ApplicantPortal.js    # Self-service portal for applicants
+│   ├── ApplicantHistory.js   # Applicant's own score history
+│   ├── ApplicantRegister.js  # New applicant registration with OTP
+│   └── Login.js              # JWT authentication
+├── components/         # (Add if you have reusable components)
+└── theme.js            # Dark/light mode theming
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+ Key Features
 
-### `npm test`
+| Feature | Description |
+|---------|-------------|
+| **JWT Authentication** | Secure login with token refresh & automatic logout |
+| **OTP Verification** | SMS/Email OTP for applicant registration |
+| **Individual Scoring** | Real-time credit score with 5-tier risk classification |
+| **Batch Scoring** | Upload CSV/process multiple applicants at once |
+| **Score History** | Filterable, sortable records with Recharts visualization |
+| **PDF/Word Export** | Generate downloadable reports for lenders |
+| **Applicant Portal** | Self-service profile & document upload for borrowers |
+| **Admin Dashboard** | Institution stats, scoring rules, user management |
+| **Theme Toggle** | Dark/light mode with persistent preference |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ Backend
 
-### `npm run build`
+This frontend connects to a Django REST API:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Backend Repo:** *(Add your backend GitHub link here)*
+- **API Base URL:** `http://127.0.0.1:8000` (local development)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Backend features:
+- Django REST Framework
+- PostgreSQL database
+- Custom credit scoring engine (`CreditScoringEngine`)
+- MoMo statement parsing & metric calculation
+- Admin panels for all models
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ Quick Start
 
-### `npm run eject`
+```bash
+# Clone the repo
+git clone https://github.com/nziz/mmcs-frontend.git
+cd mmcs-frontend
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Install dependencies
+npm install
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Start development server
+npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The app runs on http://localhost:3000 and expects the backend at http://127.0.0.1:8000.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+What I Learned
 
-## Learn More
+Building complex multi-role UIs (admin vs. applicant vs. loan officer)
+Handling JWT token refresh without page reloads
+Generating client-side PDFs and Word documents from React
+Designing inline style systems for maintainable theming
+Integrating chart libraries for financial data visualization
+Future Improvements
+[ ] Add unit tests for API layer
+[ ] Migrate to TypeScript
+[ ] Implement real-time notifications (WebSockets)
+[ ] Add PWA support for offline access
+[ ] Internationalization (English / French / Kinyarwanda)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ License
+MIT
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ Author
+Aime Octave Nziza
+BSc Business Information & Technology, University of Kigali
+Kigali, Rwanda
+LinkedIn | nziza1999@gmail.com
